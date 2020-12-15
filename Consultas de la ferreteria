@@ -1,0 +1,62 @@
+----------------------------------
+---primera consulta-------
+SELECT   
+  producto.producto_nombre,
+   
+count (DETALLE_FACTURA.producto_id)
+FROM 
+  public.factura
+inner join detalle_factura on detalle_factura.Factura_id = factura.factura_id
+inner join producto on producto.producto_id = detalle_factura.producto_id
+group by producto.producto_nombre
+
+--------------------------------
+---------segunda consulta-------
+
+SELECT 
+  empleado.empleado_nombre,
+  count (factura.factura_id)
+FROM 
+  public.factura, 
+  public.empleado
+  
+WHERE 
+  
+  factura.empleado_id = empleado.empleado_id
+  group by empleado.empleado_nombre
+
+
+--------------------------
+-------------tercera consulta-------
+
+SELECT  
+
+public.LOCALFERRETERIA.LOCAL_NOMBRE,
+public.factura.FACTURA_FECHA AS fecha,
+  count (factura.FACTURA_ID) as Numero_Fcturas
+  
+  --max()
+FROM 
+factura
+inner join empleado on empleado.empleado_id = factura.empleado_id
+inner join LOCALFERRETERIA on empleado.LOCAL_ID=LOCALFERRETERIA.LOCAL_ID
+
+where current_date - factura.FACTURA_FECHA <=7
+
+group by public.factura.FACTURA_FECHA, public.LOCALFERRETERIA.LOCAL_NOMBRE 
+order by public.factura.FACTURA_FECHA asc
+
+
+------------------------
+------------------ cuarta consulta-------
+
+select 
+public.LOCALFERRETERIA.LOCAL_NOMBRE,
+sum (factura.PRECIO_TOTAL) as Total
+from factura
+inner join empleado on empleado.empleado_id = factura.empleado_id
+inner join LOCALFERRETERIA on empleado.LOCAL_ID=LOCALFERRETERIA.LOCAL_ID
+where current_date - factura.FACTURA_FECHA <=30
+group by public.LOCALFERRETERIA.LOCAL_NOMBRE
+
+-----------------------
