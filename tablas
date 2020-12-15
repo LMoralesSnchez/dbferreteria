@@ -1,0 +1,105 @@
+/*==============================================================*/
+/* Table: CLIENTE                                               */
+/*==============================================================*/
+create table CLIENTE 
+(
+   CLIENTE_ID           integer                        not null,
+   CLIENTE_NOMBRE       char(15)                       null,
+   CLIENTE_APELLIDO     char(15)                       null,
+   CLIENTE_TELEFONO     integer                        null,
+   CLIENTE_DIRRECION    char(30)                       null,
+   constraint PK_CLIENTE primary key (CLIENTE_ID)
+);
+
+/*==============================================================*/
+/* Table: DETALLE_FACTURA                                       */
+/*==============================================================*/
+create table DETALLE_FACTURA 
+(
+   DETALLEF_ID          integer                        not null,
+   PRODUCTO_ID          integer                        null,
+   FACTURA_ID           integer                        null,
+   constraint PK_DETALLE_FACTURA primary key (DETALLEF_ID)
+);
+
+/*==============================================================*/
+/* Table: EMPLEADO                                              */
+/*==============================================================*/
+create table EMPLEADO 
+(
+   EMPLEADO_ID          integer                        not null,
+   LOCAL_ID             integer                        null,
+   EMPLEADO_NOMBRE      char(15)                       null,
+   EMPREADO_ROL         char(10)                       null,
+   EMPLEADO_TELEFONO    integer                        null,
+   constraint PK_EMPLEADO primary key (EMPLEADO_ID)
+);
+
+/*==============================================================*/
+/* Table: FACTURA                                               */
+/*==============================================================*/
+create table FACTURA 
+(
+   FACTURA_ID           integer                        not null,
+   EMPLEADO_ID          integer                        null,
+   CLIENTE_ID           integer                        null,
+   IMPORTE              float                          null,
+   FACTURA_DESCRIPCION  char(30)                       null,
+   FACTURA_FECHA        date                           null,
+   PRECIO_IVA           float                          null,
+   PRECIO_TOTAL         float                          null,
+   constraint PK_FACTURA primary key (FACTURA_ID)
+);
+
+/*==============================================================*/
+/* Table: LOCALFERRETERIA                                       */
+/*==============================================================*/
+create table LOCALFERRETERIA 
+(
+   LOCAL_ID             integer                        not null,
+   LOCAL_NOMBRE         char(15)                       null,
+   constraint PK_LOCALFERRETERIA primary key (LOCAL_ID)
+);
+
+/*==============================================================*/
+/* Table: PRODUCTO                                              */
+/*==============================================================*/
+create table PRODUCTO 
+(
+   PRODUCTO_ID          integer                        not null,
+   PRODUCTO_NOMBRE      char(15)                       null,
+   PRODUCTO_PRECIO      float                          null,
+   PRODUCTO_DESCRIPCION char(50)                       null,
+   STOCK                integer                        null,
+   constraint PK_PRODUCTO primary key (PRODUCTO_ID)
+);
+
+alter table DETALLE_FACTURA
+   add constraint FK_DETALLE__RELATIONS_PRODUCTO foreign key (PRODUCTO_ID)
+      references PRODUCTO (PRODUCTO_ID)
+      on update restrict
+      on delete restrict;
+
+alter table DETALLE_FACTURA
+   add constraint FK_DETALLE__RELATIONS_FACTURA foreign key (FACTURA_ID)
+      references FACTURA (FACTURA_ID)
+      on update restrict
+      on delete restrict;
+
+alter table EMPLEADO
+   add constraint FK_EMPLEADO_RELATIONS_LOCALFER foreign key (LOCAL_ID)
+      references LOCALFERRETERIA (LOCAL_ID)
+      on update restrict
+      on delete restrict;
+
+alter table FACTURA
+   add constraint FK_FACTURA_RELATIONS_EMPLEADO foreign key (EMPLEADO_ID)
+      references EMPLEADO (EMPLEADO_ID)
+      on update restrict
+      on delete restrict;
+
+alter table FACTURA
+   add constraint FK_FACTURA_RELATIONS_CLIENTE foreign key (CLIENTE_ID)
+      references CLIENTE (CLIENTE_ID)
+      on update restrict
+      on delete restrict;
