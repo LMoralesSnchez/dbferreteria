@@ -1,0 +1,16 @@
+CREATE OR REPLACE FUNCTION public.ventaempleado(
+    date,
+    character varying)
+  RETURNS bigint AS
+$BODY$
+SELECT 
+  count (factura.factura_id)
+FROM 
+  public.empleado
+  inner join public.factura on   factura.empleado_id = empleado.empleado_id
+WHERE 
+factura.factura_fecha= $1
+and empleado.empleado_nombre =  $2
+group by public.empleado.empleado_nombre
+$BODY$
+  LANGUAGE sql
