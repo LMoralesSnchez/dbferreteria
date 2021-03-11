@@ -1,0 +1,24 @@
+--------------------CURSOR-----------
+----cursor----
+--CURSOR QUE MUESTRE EL NOMBRE DE EMPLEADO Y LA FACTURA EMITIDA--
+do $$
+declare
+	registro RECORD;
+	Cur_fac CURSOR for
+		select
+		empleado.empleado_nombre || ' ' || empleado.empleado_apellido as Nombre_Empleado,
+		factura.factura_id as Factura_emitida,
+		factura.precio_total as Factura_total
+		from empleado
+			inner join factura on factura.empleado_id = empleado.empleado_id
+			where empleado.empleado_id = 1;
+begin
+OPEN Cur_fac;
+Fetch Cur_fac into registro;
+while (found) loop
+raise notice 'Nombre: % | Factura: % | Total: %'
+,registro.Nombre_Empleado, registro.Factura_emitida, registro.Factura_total;
+Fetch Cur_fac into registro;
+end loop;
+end $$
+language 'plpgsql';
