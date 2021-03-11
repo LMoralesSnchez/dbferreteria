@@ -1,0 +1,13 @@
+SELECT   
+  producto.producto_nombre,
+  producto.producto_id,
+  producto.producto_precio as precio_uni,
+  sum(producto.producto_precio),
+  factura.factura_fecha,
+count (DETALLE_FACTURA.producto_id)
+FROM 
+  public.factura
+inner join detalle_factura on detalle_factura.Factura_id = factura.factura_id
+inner join producto on producto.producto_id = detalle_factura.producto_id
+WHERE FACTURA.FACTURA_FECHA = '2020-12-10'
+group by producto.producto_id , factura.factura_fecha
